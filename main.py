@@ -78,10 +78,13 @@ async def generate_pdf(data: SalesContractData):
     c.drawString(50, start_y - 20, f"Contract No: {data.contract_no}")
     c.drawRightString(width - 50, start_y - 20, f"Date: {data.date}")
 
-    # 🔷 Seller Block
+    # 🔷 Horizontal Seller / Consignee / Notify Block
     y = start_y - 60
+
+    # Seller
+    x1 = 35
     c.setFont("Helvetica-Bold", 9)
-    c.drawString(35, y, "SELLER")
+    c.drawString(x1, y, "SELLER")
     seller = [
         "SHRADDHA IMPEX",
         "308, THIRD FLOOR, FORTUNE",
@@ -91,23 +94,26 @@ async def generate_pdf(data: SalesContractData):
     ]
     c.setFont("Helvetica", 9)
     for i, line in enumerate(seller):
-        c.drawString(35, y - ((i + 1) * 12), line)
+        c.drawString(x1, y - ((i + 1) * 12), line)
 
-    # 🔷 Shift y below seller block
-    y = y - ((len(seller) + 2) * 12)
-
-    # 🔷 Consignee and Notify Parties
+    # Consignee
+    x2 = 230
     c.setFont("Helvetica-Bold", 9)
-    c.drawString(230, y + 60, "CONSIGNEE | NOTIFY PARTY 1")
+    c.drawString(x2, y, "CONSIGNEE | NOTIFY PARTY 1")
     c.setFont("Helvetica", 9)
     for i, line in enumerate(data.consignee):
-        c.drawString(230, y + 45 - (i * 12), line)
+        c.drawString(x2, y - ((i + 1) * 12), line)
 
+    # Notify Party 2
+    x3 = 410
     c.setFont("Helvetica-Bold", 9)
-    c.drawString(410, y + 60, "NOTIFY PARTY 2")
+    c.drawString(x3, y, "NOTIFY PARTY 2")
     c.setFont("Helvetica", 9)
     for i, line in enumerate(data.notify_party):
-        c.drawString(410, y + 45 - (i * 12), line)
+        c.drawString(x3, y - ((i + 1) * 12), line)
+
+    max_lines = max(len(seller), len(data.consignee), len(data.notify_party))
+    y = y - ((max_lines + 2) * 12)
 
     # 🔷 Product Table
     table_data = [
